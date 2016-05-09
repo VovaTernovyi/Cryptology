@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2013.12.8)  9 MAY 2016 21:23
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2013.12.8)  10 MAY 2016 00:28
 entering extended mode
 **D:/РљСѓСЂСЃРѕРІР°*СЂРѕР±РѕС‚Р°*4*РєСѓСЂСЃ/Cryptology/РљСѓСЂСЃРѕРІР°*СЂРѕР±РѕС
 ‚Р°/Zvit.tex
@@ -349,19 +349,29 @@ Package pdftex.def Info: 4.png used on input line 430.
 (pdftex.def)             Requested size: 408.32864pt x 300.37451pt.
  [15] [16 <D:/РљСѓСЂСЃРѕРІР° СЂРѕР±РѕС‚Р° 4 РєСѓСЂСЃ/Cryptology/РљСѓСЂСЃРѕРІР° 
 СЂРѕР±РѕС‚Р°/4.png>]
-[17] [18]
-Underfull \hbox (badness 10000) in paragraph at lines 482--483
-[][]\T2A/cmr/m/it/12 Горбенко I.Д., Гор-бен-ко Ю.I. \T2A/cmr/m/n/12 При-кла-дна
- кри-пто-ло-
+[17] <Example1.png, id=79, 508.90125pt x 258.9675pt>
+File: Example1.png Graphic file (type png)
+ <use Example1.png>
+Package pdftex.def Info: Example1.png used on input line 480.
+(pdftex.def)             Requested size: 458.0069pt x 233.06857pt.
+
+Overfull \hbox (2.76282pt too wide) in paragraph at lines 480--480
+ [][] 
  []
 
+<Example2.png, id=80, 510.40688pt x 259.7203pt>
+File: Example2.png Graphic file (type png)
+ <use Example2.png>
+Package pdftex.def Info: Example2.png used on input line 485.
+(pdftex.def)             Requested size: 459.36194pt x 233.74611pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 482--483
-\T2A/cmr/m/n/12 гiя:Теорiя.Практика.Застосування: Мо-но-гра-фiя. Вид.2-ге, пе-р
-е-роб.iдоп. 
+Overfull \hbox (4.11786pt too wide) in paragraph at lines 485--485
+ [][] 
  []
 
-[19]
+[18 <D:/РљСѓСЂСЃРѕРІР° СЂРѕР±РѕС‚Р° 4 РєСѓСЂСЃ/Cryptology/РљСѓСЂСЃРѕРІР° СЂРѕР±
+РѕС‚Р°/Example1.png> <D:/РљСѓСЂСЃРѕРІР° СЂРѕР±РѕС‚Р° 4 РєСѓСЂСЃ/Cryptology/РљСѓ
+СЂСЃРѕРІР° СЂРѕР±РѕС‚Р°/Example2.png>] [19] [20]
 ("D:\РљСѓСЂСЃРѕРІР° СЂРѕР±РѕС‚Р° 4 РєСѓСЂСЃ\Cryptology\РљСѓСЂСЃРѕРІР° СЂРѕР±РѕС
 ‚Р°\Zvit.aux")
 
@@ -369,10 +379,10 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 3041 strings out of 493921
- 36909 string characters out of 3150556
+ 3051 strings out of 493921
+ 37067 string characters out of 3150556
  98627 words of memory out of 3000000
- 6270 multiletter control sequences out of 15000+200000
+ 6278 multiletter control sequences out of 15000+200000
  17987 words of font info for 48 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
  27i,17n,26p,919b,231s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -390,9 +400,9 @@ ll_TeX/texmf/fonts/type1/public/cm-super/sfbx1728.pfb><D:/Full_TeX/texmf/fonts/
 type1/public/cm-super/sfrm1095.pfb><D:/Full_TeX/texmf/fonts/type1/public/cm-sup
 er/sfrm1200.pfb><D:/Full_TeX/texmf/fonts/type1/public/cm-super/sfrm1728.pfb><D:
 /Full_TeX/texmf/fonts/type1/public/cm-super/sfti1200.pfb>
-Output written on Zvit.pdf (19 pages, 447196 bytes).
+Output written on Zvit.pdf (20 pages, 466322 bytes).
 PDF statistics:
- 141 PDF objects out of 1000 (max. 8388607)
+ 148 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 21 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 31 words of extra memory for PDF output out of 10000 (max. 10000000)
 
