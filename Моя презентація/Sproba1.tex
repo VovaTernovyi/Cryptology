@@ -1,0 +1,367 @@
+\documentclass[10pt]{beamer}
+\mode<presentation>
+  {
+    \usetheme{Warsaw}
+    \setbeamercovered{transparent}
+  }
+\usefonttheme[]{serif}
+\usepackage{fancyvrb}
+\usepackage[english,ukrainian]{babel}
+\usepackage[OT1,T2A]{fontenc}
+\usepackage[cp1251]{inputenc} % кодування документа; замість cp866nav.
+\usepackage{graphics,epsfig,bezier}
+
+\usepackage{times}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+
+\newcommand*\reals{\mathbb{R}}
+\newcommand*\nat{\mathbb{N}}
+\newcommand*\lap{\Delta}
+\newcommand*\dd[2]{\frac{\partial#1}{\partial#2}}
+\renewcommand*{\div}{\operatorname{div}}
+\newcommand*{\grad}{\operatorname{grad}}
+\renewcommand*{\Re}{\operatorname{Re}}
+\renewcommand*{\Im}{\operatorname{Im}}
+
+%\renewcommand{\theequation}{\thesection.\arabic{equation}}
+\newcommand\real{\mathbb{R}}
+%\newcommand\nat{{\rm I\! N}}
+\newcommand\beweisende{\ \hfill$\Box$\break}
+\newcommand\beweis{\ \hfill$\Box$}
+%\newcommand\proof{{\noindent \it Proof.\ }}
+%\newcommand\grad{\mathop{\rm grad}\nolimits}
+\newcommand\divv{\mathop{\rm div}\nolimits}
+%\newcommand\ch{\mathop{\rm ch}\nolimits}
+%\newcommand\sh{\mathop{\rm sh}\nolimits}
+\newcommand\ar{\!\!\!\!}
+\newcommand\vkappa{{\gamma}}
+\def\bql#1{\begin{equation}\label{#1}}
+\def\bq{\begin{equation}}
+\def\eq{\end{equation}}
+\def\eref#1{{\rm (\ref{#1})}}
+
+\mathchardef\ordinarycolon\mathcode`\:
+\mathcode`\:=\string"8000
+\begingroup \catcode`\:=\active
+  \gdef:{\mathrel{\mathop\ordinarycolon}}
+\endgroup
+
+%----------------------------------------------------------------
+% bold
+%----------------------------------------------------------------
+
+\newcommand{\bk}{{\bf k}}
+\newcommand{\bx}{{\bf x}}
+\newcommand{\by}{{\bf y}}
+\newcommand{\bnu}{\mbox{\boldmath $\nu$}}
+\newcommand{\bxi}{\mbox{\boldmath \xi}}
+
+%----------------------------------------------------------------
+% caligraphic
+%----------------------------------------------------------------
+
+\newcommand{\cF}{{\cal F}}
+\newcommand{\cM}{{\cal M}}
+\newcommand{\cH}{{\cal H}}
+\def\eref#1{{\rm (\ref{#1})}}
+\def\fref#1{{\rm Fig. \ref{#1}}}
+
+\newtheorem{definative}{Означення}
+
+%----------------------------------------------------------------
+% title
+% author
+% date
+% subject
+%----------------------------------------------------------------
+
+\title []
+{Методи обчислення композиції точок еліптичної кривої без використання інверсії}
+
+\author[] % (optional, use only with lots of authors)
+{Терновий Володимир}
+% - Give the names in the same order as the appear in the paper.
+% - Use the \inst{?} command only if the authors have different
+%   affiliation.
+
+\date[CFP 2016] % (optional, should be abbreviation of conference name)
+{\large{Львівський національний університет ім. І.Франка}}
+% - Either use conference name or its abbreviation.
+% - Not really informative to the audience, more for people (including
+%   yourself) who are reading the slides online.
+
+\subject{Обчислювальна математика}
+% This is only inserted into the PDF information catalog. Can be left
+% out.
+
+%----------------------------------------------------------------
+% document
+%----------------------------------------------------------------
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+%\begin{frame}
+%  \frametitle{Зміст}
+%  \tableofcontents
+%  % You might wish to add the option [pausesections]
+%\end{frame}
+
+%----------------------------------------------------------------
+% sections
+%----------------------------------------------------------------
+
+\section{Постановка задачі}
+%---~~~---~~~---~~~---~~~---~~~3 слайд~~~---~~~---~~~---~~~---~~~---
+\begin{frame}
+\frametitle{Постановка задачі}
+\begin{block}{}
+\begin{itemize}
+\item Розглянути типи, завдання, функції, вимоги до безпеки  криптографічних протоколів\\
+\item Дослідити криптогафічні протоколи, що базуються на доведенні з нульовим знанням.
+\item Програмно реалізувати приклад протоколу доведення з нульовим знанням для задачі відшукання гамільтонового циклу в графі.
+\end{itemize}
+\end{block}
+\end{frame}
+
+%%%%%%%%
+\section{Еліптичні криві}
+\begin{frame}
+\frametitle {Еліптичні криві}
+Кубічна крива у формі Веєрштрасса:
+\begin{block}{}
+\begin{equation}
+\label{eq:1.1}
+    y^2 = x^3 + ax + b.
+\end{equation}
+\end{block}
+
+Для прикладу на рис. 1.1 наведені кубічні криві
+\begin{equation*}
+    y^2 = x^3 - x \quad \text{та} \quad y^2 = x^3 - x + 1.
+\end{equation*}
+\begin{center}
+  \includegraphics [scale=0.5]{3.png}\\
+  Рис. 1.1. Еліптичні криві.
+\end{center}
+
+Кубічні криві, які не мають особливих точок називають еліптичними кривими.
+\end{frame}
+%%%%%%%%%%
+\section{Груповий закон для еліптичних кривих E(F(p))}
+\begin{frame}
+\frametitle{Груповий закон в афінних координатах}
+$F(q)$ є скінченним полем Галуа з $p > 3$. $E$ є еліптичною кривою над $F(Q)$, що задається "<коротким рівнянням Веєрштрасса">
+\begin{equation}
+\label{eq:1.4}
+    Y^2 = X^3 + aX + b, \quad a, b \in F(q),
+\end{equation}
+а також $4a^3 + 27b^2 \ne 0_F$ у полі $F(q)$.
+в афінних координатах груповий закон складання і подвоєння на еліптичній кривій \eqref{eq:1.4} задається таким чином:
+\begin{itemize}
+    \item точка на нескінченності $O_E$ є одиничним елементом до операції додавання $"<+">$;
+    \item усі точки $R = (x, y)$ є такими, що $R \ne O_E$;
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Груповий закон в афінних координатах}
+\begin{itemize}
+    \item якщо $R_1 = (x_1, y_1)$ і $R_2 = (x_2, y_2)$ $R_1 \ne \pm R_2$ і $R_1, R_2 \ne O_E$, то сумою точок $R_1$ та $R_2$ є точка $R_3 = (x_3, y_3)$, координати якої визначаються як:
+        \begin{equation}
+        \begin{split}
+        \label{eq:1.5}
+            x_3 & = r^2 - x_1 - x_2;\\
+            y_3 & = r(x_1 - x_3) - y_1,\\
+            r & = (y_2 - y_1)/(x_2 - x_1);
+        \end{split}
+        \end{equation}
+    \item якщо $R = (x, y)$ є точка на $E$ "--- така, що $R \ne O_E$ і $Y \ne O_F$, то її подвоєнням є точка $2R = (x_3, y_3)$, координати якої визначаються як:
+        \begin{equation}
+            \begin{split}
+                x_3 & = r^2 - 2x;\\
+                y_3 & = r(x - x_3) - y,\\
+                r & = (3x^2 + a)/(2y);
+            \end{split}
+        \end{equation}
+        У разі якщо $R = (x, O_F)$, подвоєнням цієї точки є точка $2R = O_E$.
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%
+\begin{frame}
+\frametitle{Геометрична інтерпретація складання двох точок}
+Геометрична інтерпретація складання двох точок з координатами $(x_1, y_1)$ та $(x_2, y_2)$ на еліптичній кривій;
+\begin{center}
+  \includegraphics [scale=0.7]{2.png}\\
+  Рис. 2.1. Додавання точок еліптичної кривої.
+\end{center}
+\end{frame}
+
+%%%%%%%%%%
+\begin{frame}
+\frametitle{Груповий закон у проективних координатах}
+Проективний аналог короткого афінного рівняння Веєрштрасса:
+\begin{equation}
+\label{eq:1.7}
+    Y^2Z = X^3 + aXZ^2 + bZ^3, \quad a, b \in F(Q).
+\end{equation}
+Еліптична крива, що задається в проективних координатах, складається з усіх точок $R = (X, Y, Z)$ рівняння \eqref{eq:1.7} так, що трійка $(X, Y, Z)$ є розв'язком рівняння.
+\end{frame}
+
+%%%%%%%%%%
+\begin{frame}
+\frametitle{Груповий закон у проективних координатах}
+Cпіввідношення між точками $Q$ кривої $E$, коли крива задана в афінних координатах, а точка $R$ "--- у проективних координатах. В такому разі справедливі твердження:
+\begin{enumerate}
+    \item Якщо $Q = (X_Q, Y_Q)$ є точка в афінних координатах, то $R = (X_Q, Y_Q, 1_F)$ є відповідною точкою в проективних координатах.
+    \item Якщо $R = (X, Y, Z)$ і $Z \ne O_F$ є розв'язком \eqref{eq:1.7}, то $Q = (X/Z, Y/Z)$ є відповідною точкою в афінних координатах кривої $E$.
+    \item Існує тільки один розв'язок \eqref{eq:1.7} із $Z = 0$, а саме: точка $(0_F, 1_F, 0_F)$, яка відповідає $O_E$.
+\end{enumerate}
+\end{frame}
+
+%%%%%%%%%%
+\section{Еліптична криптографія}
+\begin{frame}
+\frametitle{Еліптична криптографія}
+Еліптичний аналог традиційної криптографії з відкритим ключем виглядає таким чином:
+\begin{itemize}
+	\item Абоненти обирають і повідомляють всім форму еліптичної кривої та цілу точку $G$ на цій кривій, яка є генеруючою точкою.
+	\item Абонент $A$ обирає ціле число $k$ і знаходить точку $PA= k \cdot G$ (додає точку $G$ до самої себе $k$ разів).
+	\item Абонент $B$ обирає число $m$ і обчислює точку $PB=m \cdot G$. Потім вони обмінюються отриманими результатами і їх спільним секретним ключем стає точка $k \cdot m \cdot G$.
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%
+\section{Електронний цифровий підпис на еліптичних кривих}
+\begin{frame}
+\frametitle{Вимоги до еліптичних кривих}
+    Криптографічні еліптичні криві мають задовольняти наступним умовам:
+\begin{enumerate}
+	\item Криві розглядаються над простими полями $F_p$, де p є простим числом (або над полями характеристики два:  $F_2^m$).
+	\item Крива $E_p(a,b)$ задається в формі Веєрштраса $y^2 = x^3 + ax + b$, де $a, b \in Fp$   і $(4a^3 + 27b^2) \ne 0 (mod p)$.
+	\item На кривій має бути обрана генеруюча точка $G = (xG,yG)$ $( xG \; \text{і} \; yG \in Fp )$ простого порядку $q$, де $q > 2^{160}$ і $q > 4 \sqrt{p}$.
+	\item Порядок кривої $N_E$  має ділитися на $q$. Результат ділення $N_E/q$ називається кофактором.
+\end{enumerate}
+\end{frame}
+
+%%%%%%%%%%
+\begin{frame}
+\frametitle{Вибір параметрів ЕЦП}
+Алгоритм вибору параметрів ЕЦП виглядає наступним чином:
+\begin{enumerate}
+	\item Обрати хеш-функцію $h=H(M)$ , де $M$ "--- повідомлення.
+	\item Обрати просте число $p$ (характеристика поля $F_p$).
+	\item Обрати форму еліптичної кривої згідно описаних вище вимог, яка задає групу точок еліптичної кривої $E_p(a,b)$ і генеруючу точку $G = (x_G, y_G)$.
+\end{enumerate}
+\end{frame}
+
+%%%%%%%%%%
+\begin{frame}
+\frametitle{Генерація ключів ЕЦП}
+\begin{block}{}
+    \begin{enumerate}
+	\item Абонент $A$ обирає ціле число $d_A < p$. Це є секретним ключем абонента $А$ для його підписів. Потім він обчислює відкритий ключ $P_A=d_AG$, який є точкою кривої $E_q(a,b)$.
+	\item Абонент $B$ аналогічним чином обирає свій секретний ключ $d_B$ та знаходить відкритий ключ для підписів $P_B$.
+	\item Абоненти обмінюються відкритими ключами.
+\end{enumerate}
+\end{block}
+\end{frame}
+
+%%%%%%%%%%
+\begin{frame}
+\frametitle{Формування цифрового підпису}
+\begin{block}{}
+    \begin{enumerate}
+	\item Обчислити значення хеш-функції повідомлення $M$: $h = H(M)$,  $h < p$;
+	\item Обрати довільне ціле число $k_A$ з інтервалу $[1, p-1]$ (разовий ключ);
+	\item Обчислити точку $R=k_AG = (x1, y1)$
+	\item Обчислити значення $r = x_1 mod p$. Перевірити, щоб $r \ne 0$, бо в цьому випадку підпис $s$ не буде залежати від закритого ключа $k_A$. Якщо $r=0$, то пара чисел $(r,s)$ не може бути використана для цифрового підпису то повертаються до кроку $2$.
+	\item Обчислити зворотній елемент $k_A^{-1}$ в полі $F_p$
+	\item Обчислити $s = k_A^{-1}(h + d_Ar) mod p$. Якщо $s = 0$, то значення $s^{-1} mod p$, необхідне для перевірки підпису, не існує. Тобто, у випадку $s = 0$ потрібно повернутися до кроку $2$.
+\end{enumerate}
+\end{block}
+\end{frame}
+
+%%%%%%%%%%
+\begin{frame}
+\frametitle{Перевірка цифрового підпису}
+\begin{block}{}
+\begin{enumerate}
+	\item Отримати цифровий підпис $(r,s)$ абонента $А$ для повідомлення $M$;
+	\item Обчислити значення хеш-функції повідомлення $h = H(M)$;
+	\item Обчислити зворотній елемент $s^{-1}$ в полі $F_p$;
+	\item Обчислити $u = s^{-1}h mod n$, $v = s^{-1}r mod p$;
+	\item Обчислити точку $R'= uG + vP_A =  ( x'_1, y'_1)$;
+	\item Обчислити $r' = x'_1 mod p$;
+	\item Підпис вірний, якщо $r' = r$.
+\end{enumerate}
+\end{block}
+\end{frame}
+
+
+%%%%%%%%%
+\section{Чисельні результати}
+\begin{frame}
+\frametitle{Результати виконання програми}
+Вхідні дані:
+\begin{equation*}
+\begin{split}
+    p & = 6277101735386680763835789423207666416083908700390324961279;\\
+    a & = -3;\\
+    b & = 64210519e59c80e70fa7e9ab72243049feb8deecc146b9b1;\\
+    xG & = 03188da80eb03090f67cbf20eb43a18800f4ff0afd82ff1012;\\
+    n & = ffffffffffffffffffffffff99def836146bc9b1b4d22831.
+\end{split}
+\end{equation*}
+\begin{center}
+  \includegraphics [scale=0.5]{Example1.png}\\
+  Рис. 6.1. Приклад успішного виконання програми.
+\end{center}
+\end{frame}
+
+%%%%%%%%%
+\begin{frame}
+\frametitle{Результати виконання програми}
+\begin{center}
+  \includegraphics [scale=0.5]{Example2.png}\\
+  Рис. 6.2. Приклад невдалого виконання програми.
+\end{center}
+\end{frame}
+
+
+%%%%
+\begin{frame}
+\frametitle{Висновки}
+\begin{block}{}
+\begin{itemize}
+\item Розлянуто криптографічні протоколи, що базуються на доведенні з нульовим знанням, які є основою реалізації методів захисту інформації.\\
+\item Наведені результати програмної реалізації узгоджуються з доведеними теоретичними твердженнями.
+\item Актуальність криптографії росте з кожним роком, і реалізовує методи шифрування/дешифрування, електронного цифрового підпису, iдентифiкацiї / аутентифiкацiї які є невідємною частиною інформаційних технологій.
+\end{itemize}
+\end{block}
+\end{frame}
+%%%%%%
+\begin{frame}
+\begin{thebibliography}{99}
+\bibitem{Author}\emph{Горбенко І.Д., Горбенко Ю.І.} Прикладна криптологія:Теорія.Практика. Застосування: Монографія. Вид.2-ге, перероб.ідоп. "--- Харків: Видавництво "<Форт">, 2012. "--- 880с.
+\bibitem{Author}\emph{Иванов М.А.} Криптографические методы защиты информации в компьютерных системах и сетях, "--- М.:Кудиц-Образ, 2001 г. "--- 368с.
+\bibitem{Author}\emph{Рябко Б.Я., Фионов А.Н.} Основы современной криптографии и стеганографии, - М.: Научный мир, 2004 г. - 173с.
+\bibitem{Author}\emph{О.В.Вербіцький} Втуп до криптології, - Львів: Видавництво наукової технічної літератури, 1998. - 247 с.
+\bibitem{Author}\emph{Шнайер Брюс, Фергюсон Нильс} Практическая криптография, 2-е изд. - М: ООО "И.Д.Вильямс", 2005. — 424 с.
+\end{thebibliography}
+\end{frame}
+%%%%%%
+\begin{frame}
+\begin{center}
+\Huge{Дякую за увагу!}
+\end{center}
+
+\end{frame}
+\end{document}

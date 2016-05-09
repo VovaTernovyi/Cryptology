@@ -1,0 +1,347 @@
+\documentclass[10pt]{beamer}
+\mode<presentation>
+  {
+    \usetheme{Warsaw}
+    \setbeamercovered{transparent}
+  }
+\usefonttheme[]{serif}
+\usepackage{fancyvrb}
+\usepackage[english,ukrainian]{babel}
+\usepackage[OT1,T2A]{fontenc}
+\usepackage[cp1251]{inputenc} % кодування документа; замість cp866nav.
+\usepackage{graphics,epsfig,bezier}
+
+\usepackage{times}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+
+\newcommand*\reals{\mathbb{R}}
+\newcommand*\nat{\mathbb{N}}
+\newcommand*\lap{\Delta}
+\newcommand*\dd[2]{\frac{\partial#1}{\partial#2}}
+\renewcommand*{\div}{\operatorname{div}}
+\newcommand*{\grad}{\operatorname{grad}}
+\renewcommand*{\Re}{\operatorname{Re}}
+\renewcommand*{\Im}{\operatorname{Im}}
+
+%\renewcommand{\theequation}{\thesection.\arabic{equation}}
+\newcommand\real{\mathbb{R}}
+%\newcommand\nat{{\rm I\! N}}
+\newcommand\beweisende{\ \hfill$\Box$\break}
+\newcommand\beweis{\ \hfill$\Box$}
+%\newcommand\proof{{\noindent \it Proof.\ }}
+%\newcommand\grad{\mathop{\rm grad}\nolimits}
+\newcommand\divv{\mathop{\rm div}\nolimits}
+%\newcommand\ch{\mathop{\rm ch}\nolimits}
+%\newcommand\sh{\mathop{\rm sh}\nolimits}
+\newcommand\ar{\!\!\!\!}
+\newcommand\vkappa{{\gamma}}
+\def\bql#1{\begin{equation}\label{#1}}
+\def\bq{\begin{equation}}
+\def\eq{\end{equation}}
+\def\eref#1{{\rm (\ref{#1})}}
+
+\mathchardef\ordinarycolon\mathcode`\:
+\mathcode`\:=\string"8000
+\begingroup \catcode`\:=\active
+  \gdef:{\mathrel{\mathop\ordinarycolon}}
+\endgroup
+
+%----------------------------------------------------------------
+% bold
+%----------------------------------------------------------------
+
+\newcommand{\bk}{{\bf k}}
+\newcommand{\bx}{{\bf x}}
+\newcommand{\by}{{\bf y}}
+\newcommand{\bnu}{\mbox{\boldmath $\nu$}}
+\newcommand{\bxi}{\mbox{\boldmath \xi}}
+
+%----------------------------------------------------------------
+% caligraphic
+%----------------------------------------------------------------
+
+\newcommand{\cF}{{\cal F}}
+\newcommand{\cM}{{\cal M}}
+\newcommand{\cH}{{\cal H}}
+\def\eref#1{{\rm (\ref{#1})}}
+\def\fref#1{{\rm Fig. \ref{#1}}}
+
+\newtheorem{definative}{Означення}
+
+%----------------------------------------------------------------
+% title
+% author
+% date
+% subject
+%----------------------------------------------------------------
+
+\title []
+{Методи обчислення композиції точок еліптичної кривої без використання інверсії}
+
+\author[] % (optional, use only with lots of authors)
+{Терновий Володимир}
+% - Give the names in the same order as the appear in the paper.
+% - Use the \inst{?} command only if the authors have different
+%   affiliation.
+
+\date[CFP 2016] % (optional, should be abbreviation of conference name)
+{\large{Львівський національний університет ім. І.Франка}}
+% - Either use conference name or its abbreviation.
+% - Not really informative to the audience, more for people (including
+%   yourself) who are reading the slides online.
+
+\subject{Обчислювальна математика}
+% This is only inserted into the PDF information catalog. Can be left
+% out.
+
+%----------------------------------------------------------------
+% document
+%----------------------------------------------------------------
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+%\begin{frame}
+%  \frametitle{Зміст}
+%  \tableofcontents
+%  % You might wish to add the option [pausesections]
+%\end{frame}
+
+%----------------------------------------------------------------
+% sections
+%----------------------------------------------------------------
+
+\section{Постановка задачі}
+%---~~~---~~~---~~~---~~~---~~~3 слайд~~~---~~~---~~~---~~~---~~~---
+\begin{frame}
+\frametitle{Постановка задачі}
+\begin{block}{}
+\begin{itemize}
+\item Розглянути типи, завдання, функції, вимоги до безпеки  криптографічних протоколів\\
+\item Дослідити криптогафічні протоколи, що базуються на доведенні з нульовим знанням.
+\item Програмно реалізувати приклад протоколу доведення з нульовим знанням для задачі відшукання гамільтонового циклу в графі.
+\end{itemize}
+\end{block}
+\end{frame}
+
+%%%%%%%%
+\section{Поняття криптології, типи криптосистем}
+\begin{frame}
+\frametitle {Поняття криптології, типи криптосистем}
+\begin{block}{}
+\begin{itemize}
+\item Що таке криптологія?
+\item Типи криптоситем.
+\end{itemize}
+\end{block}
+
+\begin{center}
+    \includegraphics [scale=0.35]{50.png}
+\end{center}
+\end{frame}
+%%%%%%%%%%
+\section{Криптографічні протоколи}
+\begin{frame}
+\frametitle{Криптографічні протоколи}
+Пiд протоколом слiд розумiти послiдовнiсть узгоджених приписiв, згiдно з
+якими вiдбувається обмiн повiдомленнями мiж сторонами або учасниками протоколу задля досягнення певної мети.
+\newline
+
+
+\textbf{Завдання:}
+\begin{block}{}
+\begin{itemize}
+\item Забезпечення різних режимів аутентифікації
+\item Генерація, розподіл і узгодження криптографічних ключів
+\item Захист взаємодій учасників
+\item Розподіл відповідальності між учасниками
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+%%%%%%%%%%
+\begin{frame}
+\frametitle{Класифікація криптографічних протоколів}
+Типи протоколів які найчастіше застосовуються:
+\begin{block}{}
+\begin{itemize}
+\item Протоколи шифрування / розшифрування
+\item Протоколи електронного цифрового підпису (ЕЦП)
+\item Протоколи ідентифікації / аутентифікації
+\end{itemize}
+\end{block}
+Різновиди атак на протоколи:
+\begin{block}{}
+\begin{itemize}
+\item Атаки, спрямовані проти криптографічних алгоритмів
+\item Атаки проти криптографічних методів, що застосовуються для реалізації протоколів
+\item Атаки проти самих протоколів (активні або пасивні)
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+
+%%%%%%%%
+\section{Доведення з нульовим знанням}
+\begin{frame}
+\frametitle {Задача про розфарбування графа. Протокол доведення}
+\begin{block}{}
+\begin{itemize}
+\item Аліса вибирає випадкову перестановку П з трьох букв $R$, $B$, $Y$ і перенумеровує всі вершини графа відповідно до цієї перестановки.
+\item Для кожної вершини $v$ з множини $V$ Аліса генерує велике випадкове число $r$ і замінює в ньому два останніх біти на $00$, що відповідає червоній вершині, $01$ - синій, $10$ - жовтій.
+\item Для кожної вершини $v$ Аліса формує дані, які використовуються в $RSA$, а саме, $P_v$, $Q_v$, $N_v$ = $P_v$$Q_v$, $c_v$ і $d_v$.
+\item Аліса обчислює
+    \begin{equation}
+        Z_v=r_v^{d_v}\mod N_v
+    \end{equation}
+    і посилає Бобу значення $N_v$, $d_v$ і $Z_v$ для кожної вершини графа.
+\end{itemize}
+\end{block}
+\end{frame}
+%%%%%%%%%
+%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle {Протокол доведення}
+\begin{block}{}
+\begin{itemize}
+
+  \item Боб вибирає випадково одне ребро з множини $E$ і повідомляє Алісі, яке саме ребро він вибрав. У відповідь Аліса висилає числа $c_{v_1}$ і $c_{v_2}$, які відповідають вершинам цього ребра. Після цього Боб обчислює
+      \begin{equation}
+        \hat Z_{v_1}=Z_{v_1}^{c_{v_1}}\mod N_{v_1}=r_{v_1},\quad \hat Z_{v_2}=Z_{v_2}^{c_{v_2}}\mod N_{v_2}=r_{v_2}
+      \end{equation}
+      і порівнює два молодших біти в отриманих числах. При правильному розфарбуванні два молодших біти в числах $\hat Z_{v_1}$ і $\hat Z_{v_2}$ мають бути різні. Якщо значення співпали, значить, Аліса намагалась обманути Боба, і на цьому все закінчується. Якщо не співпали, то весь описаний процес повторюється $a|E|$ разів, де $a > 0$ $-$ параметр.
+\end{itemize}
+\end{block}
+\end{frame}
+
+%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle {Задача про знаходження гамільтонового циклу в графі. Протокол доведення}
+Гамiльтоновим циклом в графi називається неперервний шлях,
+що проходить через усi вершини графа рiвно по одному разу.
+\begin{block}{}
+\begin{itemize}
+\item Побудувати граф $H$ ізоморфний до $G$. Закодувати матрицю $H$, приписуючи до початкових нулів і одиниць випадкові числа $r_ij$ по схемі $\tilde H_{ij}=r_{ij}||H_{ij}$. Шифруємо елементи матриці $\tilde H$, отримуємо зашифровану матрицю $F$, $F_{ij}=\tilde H^d_{ij} \mod N$. Матрицю $F$ Аліса передає Бобу.
+
+\item Боб, задає Алісі одне з двох питань.
+    \begin{itemize}
+        \item Який гамільтонів цикл для графа $H$?
+        \item Чи дійсно граф $H$ ізоморфний до $G$?
+    \end{itemize}
+
+\end{itemize}
+\end{block}
+\end{frame}
+%%%%%%%%%
+%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle {Протокол доведення}
+\begin{block}{}
+\begin{itemize}
+\item Аліса відповідає на відповідне запитання Боба.
+    \begin{itemize}
+        \item Вона розшифровує в $F$ ребра, які утворюють гамільтонів цикл.
+        \item Вона розшифровує $F$ повністю (фактично передає граф $\tilde H$) і представляє перестановки, з допомогою яких граф $H$ був отриманий з графа $G$.
+    \end{itemize}
+\item Отримавши відповідь, Боб перевіряє правильність розшифрування шляхом повторного шифрування і порівняння з $F$ і переконується або в тому, що показані ребра дійсно утворюють гамільтонів цикл, або в тому, що представлені перестановки дійсно переводять граф $G$ в граф $H$.
+\end{itemize}
+\end{block}
+Весь протокол повторюється t разiв.
+\end{frame}
+
+%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle {Теореми}
+Точно основнi деталi протоколу обгрунтовуються в ходi доведення двох
+основних тверджень.
+\begin{theorem}
+Ймовірність обману при $t$ реалізаціях протокола не перевищує $2^{-t}$.
+\end{theorem}
+
+\begin{theorem}
+Представлений протокол реалізує доведення з нульовим знанням.
+\end{theorem}
+
+\end{frame}
+%-------------------------------------------------------------------
+%%%%%%%%%
+\section{Чисельні результати}
+\begin{frame}
+\frametitle{Результати виконання програми}
+Візьмемо в якості основного граф $G$:
+\begin{center}
+    \includegraphics [scale=0.5]{53.png}
+\end{center}
+
+\end{frame}
+%%%%%%%
+\begin{frame}
+\frametitle{Результати виконання програми}
+Матриця суміжності $G$ має вигляд:
+\begin{equation}
+    \begin{pmatrix}
+      \begin{matrix}
+        0 & 0 & 1 & 0 & 0 & 1 & 1 & 1 \\
+        0 & 0 & 1 & 1 & 0 & 0 & 0 & 1 \\
+        1 & 1 & 0 & 0 & 1 & 1 & 1 & 0 \\
+        0 & 1 & 0 & 0 & 0 & 1 & 0 & 0 \\
+        0 & 0 & 1 & 0 & 0 & 0 & 1 & 1 \\
+        1 & 0 & 1 & 1 & 0 & 0 & 0 & 0 \\
+        1 & 0 & 1 & 0 & 1 & 0 & 0 & 0 \\
+        1 & 1 & 0 & 0 & 1 & 0 & 0 & 0 \\
+      \end{matrix}
+    \end{pmatrix}
+  \end{equation}
+\end{frame}
+%%%%
+\begin{frame}
+\frametitle{Результати виконання програми}
+\begin{block}{}
+    \begin{itemize}
+        \item Випадковим чином вибираємо нумерацію вершин (у нашому випадку 7, 4, 5, 3, 1, 2, 8, 6)
+        \item Приписуємо зліва до кожного елементу матриці вибрану випадковим чином цифру з множини ${1,2,3,4,5}$.
+        \item Шифруємо матрицю $\tilde H$ підносячи кожний її елемент в куб по модулю 55
+        \item Боб отимує матрицю $F$ і задає одне з двох питань:
+            \begin{enumerate}
+                \item Доказати ізоморфізм графів
+                \item Показати гамільтонів цикл
+            \end{enumerate}
+    \end{itemize}
+\end{block}
+\end{frame}
+%%%%
+\begin{frame}
+\frametitle{Висновки}
+\begin{block}{}
+\begin{itemize}
+\item Розлянуто криптографічні протоколи, що базуються на доведенні з нульовим знанням, які є основою реалізації методів захисту інформації.\\
+\item Наведені результати програмної реалізації узгоджуються з доведеними теоретичними твердженнями.
+\item Актуальність криптографії росте з кожним роком, і реалізовує методи шифрування/дешифрування, електронного цифрового підпису, iдентифiкацiї / аутентифiкацiї які є невідємною частиною інформаційних технологій.
+\end{itemize}
+\end{block}
+\end{frame}
+%%%%%%
+\begin{frame}
+\begin{thebibliography}{99}
+\bibitem{Author}\emph{О.В.Вербіцький} Втуп до криптології, - Львів: Видавництво наукової технічної літератури, 1998. - 247 с.
+\bibitem{Author}\emph{Рябко Б.Я., Фионов А.Н.} Основы современной криптографии и стеганографии, - М.: Научный мир, 2004 г. - 173 с.
+\bibitem{Author}\emph{ Анатолий Малюк} Теория защиты информации. - М.: Телеком, 2012. - 186 с.
+\bibitem{Author}\emph{Шнайер Брюс, Фергюсон Нильс} Практическая криптография, 2-е изд. - М: ООО "И.Д.Вильямс", 2005. — 424 с.
+\end{thebibliography}
+\end{frame}
+%%%%%%
+\begin{frame}
+\begin{center}
+\Huge{Дякую за увагу!}
+\end{center}
+
+\end{frame}
+\end{document}
