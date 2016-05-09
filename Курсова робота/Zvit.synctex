@@ -1,5 +1,5 @@
 SyncTeX Version:1
-Input:1:D:/Криптологія/Курсова робота 4 курс/Курсова робота/Zvit.tex
+Input:1:D:/Курсова робота 4 курс/Cryptology/Курсова робота/Zvit.tex
 Input:2:D:\Full_TeX\texmf\tex\latex\base\article.cls
 Input:3:D:\Full_TeX\texmf\tex\latex\base\size12.clo
 Input:4:D:\Full_TeX\texmf\tex\generic\babel\babel.sty
@@ -30,7 +30,7 @@ Input:28:D:\Full_TeX\texmf\tex\latex\tools\array.sty
 Input:29:D:\Full_TeX\texmf\tex\latex\t2\misccorr.sty
 Input:30:D:\Full_TeX\texmf\tex\latex\tools\enumerate.sty
 Input:31:D:\Full_TeX\texmf\tex\latex\tools\indentfirst.sty
-Input:32:D:\Криптологія\Курсова робота 4 курс\Курсова робота\Zvit.aux
+Input:32:D:\Курсова робота 4 курс\Cryptology\Курсова робота\Zvit.aux
 Input:33:D:\Full_TeX\texmf\tex\latex\cyrillic\t2acmr.fd
 Input:34:D:\Full_TeX\texmf\tex\context\base\supp-pdf.mkii
 Input:35:D:\Full_TeX\texmf\tex\latex\amsfonts\umsa.fd
@@ -41,7 +41,7 @@ Unit:1
 X Offset:0
 Y Offset:0
 Content:
-!2229
+!2205
 {1
 [1,58:4736286,51308773:30308503,46572487,0
 [1,58:5209913,51308773:29834876,48437166,0
@@ -447,8 +447,8 @@ h1,58:5209913,51308773:29834876,0,0
 ]
 !9916
 }1
-Input:37:D:\Криптологія\Курсова робота 4 курс\Курсова робота\Zvit.toc
-!120
+Input:37:D:\Курсова робота 4 курс\Cryptology\Курсова робота\Zvit.toc
+!108
 {2
 [1,64:4736286,51308773:30308503,46572487,0
 [1,64:5209913,51308773:29834876,48437166,0
@@ -13674,8 +13674,8 @@ k1,351:35044789,51308773:14532508
 ]
 !5694
 }12
-Input:38:D:\Криптологія\Курсова робота 4 курс\Курсова робота\Zvit.aux
-!121
+Input:38:D:\Курсова робота 4 курс\Cryptology\Курсова робота\Zvit.aux
+!109
 Postamble:
 Count:7806
 !27
